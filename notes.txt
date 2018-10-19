@@ -1,0 +1,27 @@
+1. Medical Dataset:
+	Linear Models : 1 vs. all
+	Logistic Models : 1 vs. all
+	Multi class discriminative models (logistic multiclass) (softmax)
+	perceptron : 1 vs. all
+	svm
+	FLDA
+
+2. Railway Dataset:
+	Linear Models : 1 vs. all
+	Logistic Models : 1 vs. all
+	perceptron : 1 vs. all
+	svm
+	FLDA
+
+3. FMINST: apply PCA
+	Linear Models : 1 vs. all
+	Logistic Models : 1 vs. all
+	Multi class discriminative models (logistic multiclass) (softmax)
+	perceptron : 1 vs. all
+	svm
+	FLDA
+
+4. River Dataset:
+	Linear Models with various kernels
+	FLDA
+
