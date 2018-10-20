@@ -3,28 +3,6 @@ import numpy as np
 import math
 
 
-def sigmoid(x):
-    return 1 / (1 + np.exp(-x))
-
-
-def gradient_descent(x_train, y_train, num_iters, learning_rate, theta):
-    X = np.array(x_train)
-    Y = np.array(y_train)
-    parameter = theta
-    while (num_iters > 0):
-        parameter = step_gradient(X, Y, learning_rate, parameter)
-        num_iters -= 1
-    return parameter
-
-
-def step_gradient(X, Y, learning_rate, parameter):
-    temp = (sigmoid(np.dot(X, parameter)) - Y)
-    temp = np.dot(X.T, temp)
-    # cost = -np.dot(Y.T, np.log(sigmoid(np.dot(X, parameter)))) - np.dot(
-    #     (1 - Y).T, np.log(1 - sigmoid(np.dot(X, parameter))))
-    parameter -= learning_rate * (1 / len(X)) * temp
-    return parameter
-
 
 labels = {'HEALTHY': 0, 'MEDICATION': 1, 'SURGERY': 2}
 lines = csv.reader(open("./Medical_data.csv"))
