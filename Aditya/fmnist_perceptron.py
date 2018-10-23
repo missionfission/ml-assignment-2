@@ -40,7 +40,7 @@ def checker(test, test_label, wts, numclass):
         predicted=np.argmax(val)
         stats[int(actual), int(predicted)]+=1
     acc=np.trace(stats)/np.sum(stats)*100
-    return acc
+    return stats
 
 def shorten(egvec, train_img, test_img, num_features_new):
     egvec=egvec[:, -num_features_new:len(egvec)]
@@ -50,24 +50,24 @@ def shorten(egvec, train_img, test_img, num_features_new):
 
 
 def readfile(filename):
-	fsdata=MNIST(filename)
-	[train_img, train_label]=fsdata.load_training()
-	[test_img, test_label]=fsdata.load_testing()
-	for i in range(len(train_img)):
-	    train_img[i]=list(train_img[i])
-	train_label=list(train_label)
-	for i in range(len(test_img)):
-	    test_img[i]=list(test_img[i])
-	test_label=list(test_label)
-	mu=np.mean(train_img, axis=0, dtype=np.float64)
-	x=train_img-mu
-	cov=np.dot(np.transpose(x), x)
-	cov=np.divide(cov, len(x))
-	[egval, egvec]=la.eig(cov)
-	idx=np.argsort(egval)
-	egval=egval[idx]
-	egvec=egvec[:, idx]
-	return [egvec, train_img, test_img, train_label, test_label]
+    fsdata=MNIST(filename)
+    [train_img, train_label]=fsdata.load_training()
+    [test_img, test_label]=fsdata.load_testing()
+    for i in range(len(train_img)):
+        train_img[i]=list(train_img[i])
+    train_label=list(train_label)
+    for i in range(len(test_img)):
+        test_img[i]=list(test_img[i])
+    test_label=list(test_label)
+    mu=np.mean(train_img, axis=0, dtype=np.float64)
+    x=train_img-mu
+    cov=np.dot(np.transpose(x), x)
+    cov=np.divide(cov, len(x))
+    [egval, egvec]=la.eig(cov)
+    idx=np.argsort(egval)
+    egval=egval[idx]
+    egvec=egvec[:, idx]
+    return [egvec, train_img, test_img, train_label, test_label]
 
 
 [egvec, train_data_full, test_data_full, train_label, test_label]=readfile("fashion1")
@@ -102,8 +102,10 @@ while num_features_new<784:
         for j in range(numiter):
             # print(wt)
             wts[k]=percept(train_data, train_label, wts[k], k)
-    acc=checker(test_data, test_label, wts, numclass)
+    stats=checker(test_data, test_label, wts, numclass)
+    acc=np.trace(stats)/np.sum(stats)*100
     print("acc value is: "+str(acc))
+    print(stats)
     # print(acc)
     # f1.write(str(acc))
     # f1.write("\n")
