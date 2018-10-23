@@ -2,6 +2,7 @@
 
 import csv
 import numpy as np
+import matplotlib.pyplot as plt
 
 def readfile(file):
     l1=csv.reader(open(file))
@@ -55,22 +56,22 @@ def setData(data, ratio):
 def sigmoid(x):
     return 1 / (1 + np.exp(-x))
 
-def gradient_descent(x_train, y_train, num_iters, learning_rate, theta):
+def gradient_descent(x_train, y_train, num_iters, learning_rate, theta, reg_para):
     X = np.array(x_train)
     Y = np.array(y_train)
     parameter = theta
     while (num_iters > 0):
-        parameter = step_gradient(X, Y, learning_rate, parameter)
+        parameter = step_gradient(X, Y, learning_rate, parameter, reg_para)
         num_iters -= 1
     return parameter
 
 
-def step_gradient(X, Y, learning_rate, parameter):
+def step_gradient(X, Y, learning_rate, parameter, reg_para):
     temp = (sigmoid(np.dot(X, parameter)) - Y)
     temp = np.dot(X.T, temp)
     # cost = -np.dot(Y.T, np.log(sigmoid(np.dot(X, parameter)))) - np.dot(
     #     (1 - Y).T, np.log(1 - sigmoid(np.dot(X, parameter))))
-    parameter -= learning_rate * (1 / len(X)) * temp
+    parameter -= learning_rate * (1 / len(X)) * temp + reg_para*(1/len(X))*parameter
     return parameter
 
 def checker(test, wt, threshold, numclass):
@@ -97,6 +98,7 @@ numclass=2
 learning_rate=0.1
 num_iters=1000
 threshold=0.5
+reg_para=0.00
 x_train=np.zeros([len(train_data), len(train_data[0])-1])
 y_train=np.zeros([len(train_data),1])
 for i in range(len(x_train)):
@@ -104,8 +106,38 @@ for i in range(len(x_train)):
         x_train[i][j]=train_data[i][j]
     y_train[i]=train_data[i][-1]
 parameter=np.ones([len(x_train[0]), len(y_train[0])])
-parameter=gradient_descent(x_train, y_train, num_iters, learning_rate, parameter)
+parameter=gradient_descent(x_train, y_train, num_iters, learning_rate, parameter, reg_para)
 stats=checker(test_data, parameter, threshold, numclass)
 acc=np.trace(stats)/np.sum(stats)*100
 print(acc)
 print(stats)
+
+
+# variation of accuracy with reg_para
+
+# dataset=readfile("railwayBookingList.csv")
+# ratio=0.7
+# [train_data, test_data]=setData(dataset, ratio)
+# numclass=2
+# learning_rate=0.1
+# num_iters=1000
+# threshold=0.5
+# reg_para=0.00
+# acc1=np.zeros(100)
+# while(reg_para<10):
+#     x_train=np.zeros([len(train_data), len(train_data[0])-1])
+#     y_train=np.zeros([len(train_data),1])
+#     for i in range(len(x_train)):
+#         for j in range(len(x_train[0])):
+#             x_train[i][j]=train_data[i][j]
+#         y_train[i]=train_data[i][-1]
+#     parameter=np.ones([len(x_train[0]), len(y_train[0])])
+#     parameter=gradient_descent(x_train, y_train, num_iters, learning_rate, parameter, reg_para)
+#     stats=checker(test_data, parameter, threshold, numclass)
+#     acc=np.trace(stats)/np.sum(stats)*100
+#     print(acc)
+#     # print(stats)
+#     acc1[int(reg_para*10)]=acc
+#     reg_para+=0.1
+# plt.plot(acc1)
+# plt.show()
