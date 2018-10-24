@@ -115,29 +115,29 @@ print(stats)
 
 # variation of accuracy with reg_para
 
-# dataset=readfile("railwayBookingList.csv")
-# ratio=0.7
-# [train_data, test_data]=setData(dataset, ratio)
-# numclass=2
-# learning_rate=0.1
-# num_iters=1000
-# threshold=0.5
-# reg_para=0.00
-# acc1=np.zeros(100)
-# while(reg_para<10):
-#     x_train=np.zeros([len(train_data), len(train_data[0])-1])
-#     y_train=np.zeros([len(train_data),1])
-#     for i in range(len(x_train)):
-#         for j in range(len(x_train[0])):
-#             x_train[i][j]=train_data[i][j]
-#         y_train[i]=train_data[i][-1]
-#     parameter=np.ones([len(x_train[0]), len(y_train[0])])
-#     parameter=gradient_descent(x_train, y_train, num_iters, learning_rate, parameter, reg_para)
-#     stats=checker(test_data, parameter, threshold, numclass)
-#     acc=np.trace(stats)/np.sum(stats)*100
-#     print(acc)
-#     # print(stats)
-#     acc1[int(reg_para*10)]=acc
-#     reg_para+=0.1
-# plt.plot(acc1)
-# plt.show()
+dataset=readfile("railwayBookingList.csv")
+ratio=0.7
+[train_data, test_data]=setData(dataset, ratio)
+numclass=2
+learning_rate=0.1
+num_iters=1000
+threshold=0.5
+reg_para=0.00
+acc1=np.zeros(100)
+while(reg_para<10):
+    x_train=np.zeros([len(train_data), len(train_data[0])-1])
+    y_train=np.zeros([len(train_data),1])
+    for i in range(len(x_train)):
+        for j in range(len(x_train[0])):
+            x_train[i][j]=train_data[i][j]
+        y_train[i]=train_data[i][-1]
+    parameter=np.ones([len(x_train[0]), len(y_train[0])])
+    parameter=gradient_descent(x_train, y_train, num_iters, learning_rate, parameter, reg_para)
+    stats=checker(test_data, parameter, threshold, numclass)
+    acc=np.trace(stats)/np.sum(stats)*100
+    print(acc)
+    print(stats)
+    acc1[int(reg_para*10)]=acc
+    reg_para+=0.1
+plt.plot(acc1)
+plt.show()
