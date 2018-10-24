@@ -84,27 +84,42 @@ def checker(test, wts, numclass):
         predicted=np.argmax(val)
         stats[int(actual), int(predicted)]+=1
     acc=np.trace(stats)/np.sum(stats)*100
-    return acc
+    return stats
 
 data=readfile("Medical_data.csv")
-ratio=0.41
-acc1=np.zeros(100)
+ratio=0.65
 numclass=3
 numiter=10
-while ratio<0.85:
-    [train, test]=setData(data, ratio)
-    wts=np.zeros([numclass, len(data[0])-1])
-    for i in range(numclass):
-        acc_train=0
-        for j in range(numiter):
-            # print(wt)
-            wts[i]=percept(train, wts[i], i)
-    acc=checker(test, wts, numclass)
-    print(acc)
-    b1=int(ratio*100)
-    acc1[b1]=acc
-    ratio+=0.01
-a1=np.argmax(acc1)
-print(acc1[a1])
-a1=a1/100
-print(a1)
+[train, test]=setData(data, ratio)
+wts=np.zeros([numclass, len(data[0])-1])
+for i in range(numclass):
+    acc_train=0
+    for j in range(numiter):
+        # print(wt)
+        wts[i]=percept(train, wts[i], i)
+stats=checker(test, wts, numclass)
+accc=(np.trace(stats)/np.sum(stats)*100)
+print(accc)
+print(stats)
+
+
+# data=readfile("Medical_data.csv")
+# ratio=0.6
+# acc1=np.zeros(100)
+# numclass=3
+# numiter=10
+# acc1=np.zeros(100)
+# while(ratio<0.8):
+#     [train, test]=setData(data, ratio)
+#     wts=np.zeros([numclass, len(data[0])-1])
+#     for i in range(numclass):
+#         acc_train=0
+#         for j in range(numiter):
+#             # print(wt)
+#             wts[i]=percept(train, wts[i], i)
+#     stats=checker(test, wts, numclass)
+#     accc=(np.trace(stats)/np.sum(stats)*100)
+#     # print(stats)
+#     acc1[int(ratio*100)]=accc
+#     ratio+=0.01
+# print(np.max(acc1))

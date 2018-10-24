@@ -77,23 +77,35 @@ def percept(train_data, wt):
         wt=predict(train_data[i], wt)
     return wt
 
-def checker(test, wt):
-    correct=0
-    wrong=0
+def checker(test, wt, numclass):
+    stats=np.zeros([numclass, numclass])
     for i in range(len(test)):        
         actual=test[i][-1]
         val=np.dot(np.transpose(test[i][:-1]),wt)
-        if(val>=0 and actual==1):
-            correct+=1
-        elif(val<0 and actual==0):
-            correct+=1
+        if(val>=0):
+            predicted=1
         else:
-            wrong+=1
-    acc=correct/(correct+wrong)*100
-    return acc
+            predicted=0
+        stats[int(predicted), int(actual)]+=1
+    return stats
 
 
 
+
+
+# data=readfile("railwayBookingList.csv")
+# ratio=0.65
+# acc1=np.zeros(100)
+# numclass=2
+# numiter=1
+# [train, test]=setData(data, ratio)
+# wt=np.ones(np.size(train[0])-1)
+# for i in range(numiter):
+#     # print(wt)
+#     wt=percept(train, wt)
+# stats=checker(test, wt, numclass)
+# print(np.trace(stats)/np.sum(stats)*100)
+# print(stats)
 
 
 data=readfile("railwayBookingList.csv")
@@ -101,24 +113,16 @@ ratio=0.6
 acc1=np.zeros(100)
 numclass=2
 numiter=1
-while ratio<0.8:
-    # print(ratio*1000)
-#     ratio=0.4
+acc1=np.zeros(100)
+while(ratio<0.8):
     [train, test]=setData(data, ratio)
-    # print(m)
-    # print(std)
     wt=np.ones(np.size(train[0])-1)
-    acc_train=0
     for i in range(numiter):
         # print(wt)
         wt=percept(train, wt)
-
-    acc=checker(test, wt)
-    # print(acc)
-    b1=int(ratio*100)
-    acc1[b1]=acc
+    stats=checker(test, wt, numclass)
+    accc=(np.trace(stats)/np.sum(stats)*100)
+    # print(stats)
+    acc1[int(ratio*100)]=accc
     ratio+=0.01
-a1=np.argmax(acc1)
-print(acc1[a1])
-a1=a1/100
-print(a1)
+print(np.max(acc1))
